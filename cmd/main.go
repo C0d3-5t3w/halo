@@ -198,6 +198,12 @@ func genDirs() {
 		fmt.Fprintf(os.Stderr, "Error creating web/assets/js directory: %v\n", err)
 		os.Exit(1)
 	}
+
+	err = os.MkdirAll("web/assets/images", 0755)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error creating web/assets/images directory: %v\n", err)
+		os.Exit(1)
+	}
 }
 
 func genFiles() {

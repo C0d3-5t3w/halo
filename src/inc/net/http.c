@@ -74,14 +74,37 @@ vd start_server(vd) {
         
         read(client_fd, buffer, 4096);
         
-        ch *filepath = "web/pages/index.html";
-        if (strstr(buffer, "GET /css/main.css")) {
-            filepath = "web/assets/css/main.css";
-        } else if (strstr(buffer, "GET /js/main.js")) {
-            filepath = "web/assets/js/main.js";
+        /* Extract URL path from GET request */
+        ch url_path[MAX_PATH_LEN] = {0};
+        ch *get_start = strstr(buffer, "GET ");
+        if (get_start) {
+            get_start += 4; /* Skip "GET " */
+            ch *path_end = strchr(get_start, ' ');
+            if (path_end) {
+                in path_len = path_end - get_start;
+                if (path_len < MAX_PATH_LEN) {
+                    strncpy(url_path, get_start, path_len);
+                    url_path[path_len] = '\0';
+                }
+            }
         }
         
-        serve_file(client_fd, filepath);
+        /* Look up file path from config */
+        ch *filepath = get_file_for_path(url_path);
+        if (!filepath) {
+            /* Default to home page for root */
+            if (strcmp(url_path, "/") == 0) {
+                filepath = get_file_for_path("/");
+            }
+        }
+        
+        if (filepath) {
+            serve_file(client_fd, filepath);
+        } else {
+            ch *response = "HTTP/1.1 404 Not Found\r\n\r\n<h1>404 Not Found</h1>";
+            write(client_fd, response, strlen(response));
+        }
+        
         close(client_fd);
     }
     
