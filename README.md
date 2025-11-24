@@ -6,7 +6,7 @@
 ### Build and install:
 
 ```bash
-make all && sudo make install
+make && sudo make install
 ```
 
 ### Uninstall:
