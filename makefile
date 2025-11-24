@@ -1,5 +1,8 @@
 .PHONY: all init build clean run install uninstall
 
+default_target: all
+.PHONY : default_target
+
 APP=halo
 INIT=haloinit
 

@@ -30,8 +30,19 @@ SOFTWARE.v
 `
 
 var CONFIG = `{
-  "port": 8080,
-  "address": "localhost"
+    "port": 8080,
+    "address": "localhost",
+    "pages": {
+        "home": "web/pages/index.html"
+    },
+    "css": {
+        "main": "web/assets/css/main.css"
+    },
+    "js": {
+        "main": "web/assets/js/main.js"
+    },
+    "images": {
+    }
 }
 `
 
